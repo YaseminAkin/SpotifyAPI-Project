@@ -8,23 +8,23 @@ function miniSidebar() {
                 </svg>
             </button>
 
-            <aside id="default-sidebar" className="ml-3 mt-3 w-1/3 transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
-                <div className="bg-zinc-900 overflow-y-auto rounded-lg">
+            <aside id="default-sidebar" className="ml-1 mt-1 w-[26rem] transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
+                <div className="bg-zinc-900 overflow-y-auto rounded-md">
                     <ul className="space-y-2 font-normal">
                         <li>
-                            <a href="#" className="flex items-center p-2 text-zinc-600 hover:text-white group">
-                                <svg className="w-6 h-6 group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8v10a1 1 0 0 0 1 1h4v-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5h4a1 1 0 0 0 1-1V8M1 10l9-9 9 9"/>
+                            <a href="#" className="flex items-center p-4 text-slate-400 hover:text-white">
+                                <svg className="w-6 h-6" id="icon1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                    <path stroke="currentColor" strokeWidth="1.5" d="M3 8v10a1 1 0 0 0 1 1h4v-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5h4a1 1 0 0 0 1-1V8M1 10l9-9 9 9"/>
                                 </svg>
-                                <span className="ml-3">Home page</span>
+                                <span className="ml-5">Home page</span>
                             </a>
                         </li>
                         <li>
-                            <a href="#" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                                <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                            <a href="#" className="flex items-center p-4 text-slate-400 hover:text-white">
+                                <svg className="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                    <path stroke="currentColor" strokeWidth="1.5" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                                 </svg>
-                                <span className="flex-1 ml-3 whitespace-nowrap">Search</span>
+                                <span className="flex-1 ml-5 whitespace-nowrap">Search</span>
                             </a>
                         </li>
 

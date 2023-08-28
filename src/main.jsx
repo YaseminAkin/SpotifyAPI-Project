@@ -7,8 +7,6 @@ import MiniSidebar from "./componnets/sidebar/miniSidebar.jsx";
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-
-          <MiniSidebar/>
-
+      <MiniSidebar/>
   </React.StrictMode>,
 )

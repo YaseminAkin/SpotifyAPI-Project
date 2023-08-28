@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.icon {
+    opacity: 0;
+}
+
+.icon:hover ~ #icon1 {
+    opacity: 0; /* Show icon2 when icon is focus */
+}
+
+.icon:hover ~ #icon2 {
+    opacity: 1; /* Hide icon1 when icon is focus */
+}
