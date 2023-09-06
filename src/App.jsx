@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import Login from "./pages/login.jsx";
 import Home from "./pages/home.jsx"
+import Search from "./pages/search.jsx";
 
 function App() {
   const [token, setToken] = useState("")
@@ -27,7 +28,7 @@ function App() {
     window.localStorage.removeItem("token")
   }
 
-  return !token ? <Login/> : <Home logout={logout} token = {token}/>
+  return !token ? <Login/> : <Search logout={logout} token = {token}/>
 
 }
 
