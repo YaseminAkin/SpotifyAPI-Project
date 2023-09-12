@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
+import {Link} from "react-router-dom";
 
 function MiniSidebar(props) {
 
     const[playlists, setPlaylists] = useState([]);
 
     useEffect(() => {
-        console.log("useEffect is running");
-        // eslint-disable-next-line react/prop-types
-        requestPlaylists(props.token);
+        // eslint-disable-next-line react/prop-types,no-unused-vars
+        const promise = requestPlaylists(props.token);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -24,22 +24,18 @@ function MiniSidebar(props) {
         const json = await res.json();
         const userId = json.id;
 
-        try{
-            const res = await fetch(
-                `https://api.spotify.com/v1/users/${userId}/playlists`, {
-                    method: 'GET',
-                    headers: {'Authorization' : 'Bearer ' + token}
-                }
-            );
-            if (!res.ok) {
-                throw new Error(`HTTP error! Status: ${res.status}`);
+        const res2 = await fetch(
+            `https://api.spotify.com/v1/users/${userId}/playlists`, {
+                method: 'GET',
+                headers: {'Authorization' : 'Bearer ' + token}
             }
-            const json = await res.json();
-
-            setPlaylists(json.items);
-        }catch (error) {
-            console.error('Error fetching playlists:', error);
+        );
+        if (!res2.ok) {
+            throw new Error(`HTTP error! Status: ${res2.status}`);
         }
+        const json2 = await res2.json();
+
+        setPlaylists(json2.items);
     }
 
     return(
@@ -62,7 +58,7 @@ function MiniSidebar(props) {
                             </a>
                         </li>
                         <li>
-                            <a href="#" className="flex items-center p-4 hover:text-white focus:text-white">
+                            <a href="/search" className="flex items-center p-4 hover:text-white focus:text-white">
                                 <svg className="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                                     <path stroke="currentColor" strokeWidth="1.5" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                                 </svg>
@@ -113,24 +109,26 @@ function MiniSidebar(props) {
                                 <span className="flex-1 ml-5 text-sm whitespace-nowrap">Search in Your Library</span>
                             </a>
                         </li>
-                        <li>
+                        <li className="overflow-y-auto" style={{ maxHeight: 'calc(100vh - 180px)' }}>
                             <ul role="list" className ="my-2">
                                 {playlists.map((playlist) => (
-                                    <li key={playlist.id} className="mx-2 rounded-md py-3 sm:py-4 px-4 hover:bg-zinc-800">
-                                        <div className="flex items-center space-x-4">
-                                            <div className="flex-shrink-0">
-                                                <img className="w-12 h-12 rounded-sm" src={playlist.images[0].url} alt="Playlist image"></img>
+                                    <Link key={playlist.id} to={`/playlist/${playlist.id}`}>
+                                        <li className="mx-2 rounded-md py-3 sm:py-4 px-4 hover:bg-zinc-800">
+                                            <div className="flex items-center space-x-4">
+                                                <div className="flex-shrink-0">
+                                                    <img className="w-12 h-12 rounded-sm" src={playlist.images[0].url} alt="Playlist image"></img>
+                                                </div>
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="text-sm font-lg text-white truncate">
+                                                        {playlist.name}
+                                                    </p>
+                                                    <p className="text-sm text-gray-500 truncate font-normal">
+                                                        {playlist.type.charAt(0).toUpperCase() + playlist.type.slice(1)} · {playlist.owner.display_name}
+                                                    </p>
+                                                </div>
                                             </div>
-                                            <div className="flex-1 min-w-0">
-                                                <p className="text-sm font-lg text-white truncate">
-                                                    {playlist.name}
-                                                </p>
-                                                <p className="text-sm text-gray-500 truncate font-normal">
-                                                    {playlist.type.charAt(0).toUpperCase() + playlist.type.slice(1)} · {playlist.owner.display_name}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </li>
+                                        </li>
+                                    </Link>
                                 ))}
                             </ul>
                         </li>
