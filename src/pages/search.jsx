@@ -49,6 +49,52 @@ function Search(props) {
         setShowResult(true);
     }
 
+    async function addTracksToPlaylist(token, uri) {
+        const data = {
+            uris: [
+                `${uri}`,
+            ],
+            position: 0,
+        };
+
+        const url = `https://api.spotify.com/v1/playlists/${playlists.at(0).id}/tracks`;
+
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                Authorization: "Bearer " + token,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+    }
+
+    async function requestPlaylists(token) {
+        const res = await fetch(
+            'https://api.spotify.com/v1/me/playlists?limit=6&offset=0', {
+                method: 'GET',
+                headers: {'Authorization' : 'Bearer ' + token}
+            }
+        );
+        if (!res.ok) {
+            throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+        const json = await res.json();
+        setPlaylists(json.items);
+    }
+
+    const[playlists, setPlaylists] = useState([]);
+
+    useEffect(() => {
+        // eslint-disable-next-line react/prop-types,no-unused-vars
+        const promise1 = requestPlaylists(props.token);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     function formatDuration(durationInMilliseconds) {
         // Calculate minutes and seconds
         const minutes = Math.floor(durationInMilliseconds / 60000);
@@ -137,12 +183,15 @@ function Search(props) {
                                     </div>
                                 </div>
                                 <h6 className="opacity-60 text-sm">{formatDuration(track.duration_ms)}</h6>
-                                <svg className=" w-4 h-4 text-white opacity-75 text mt-4 ml-10 hover:text-green-500" aria-hidden=" true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20" data-tooltip-target="tooltip-no-arrow6">
-                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M10 5.757v8.486M5.757 10h8.486M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                                </svg>
-                                <div id="tooltip-no-arrow6" role="tooltip" className="absolute z-10 ml-2 invisible inline-block px-3 py-2 text-sm font-sm opacity-0 rounded-md text-slate-100 bg-zinc-800 tooltip">
-                                    Add to playlist
-                                </div>
+                                {/* eslint-disable-next-line react/prop-types */}
+                                <button onClick={() => addTracksToPlaylist(props.token, track.uri)}>
+                                    <svg className=" w-4 h-4 text-white opacity-75 text mt-4 ml-10 hover:text-green-500" aria-hidden=" true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20" data-tooltip-target="tooltip-no-arrow6">
+                                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M10 5.757v8.486M5.757 10h8.486M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                    </svg>
+                                    <div id="tooltip-no-arrow6" role="tooltip" className="absolute z-10 ml-2 invisible inline-block px-3 py-2 text-sm font-sm opacity-0 rounded-md text-slate-100 bg-zinc-800 tooltip">
+                                        Add to playlist
+                                    </div>
+                                </button>
                             </div>
                         </div>
                             ))}

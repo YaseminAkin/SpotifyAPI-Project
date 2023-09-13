@@ -48,11 +48,13 @@ function Playlist(props) {
                 }
             ]
         },
-        type :"test"
+        type :"test",
+        uri: "test"
     };
 
     const[playlist, setPlaylist] = useState(initialPlaylist);
     const[userImage, setUserImage] = useState("");
+    const[isPlaying, setIsPlaying] = useState(false);
 
     useEffect(() => {
         // eslint-disable-next-line react/prop-types,no-unused-vars
@@ -92,6 +94,30 @@ function Playlist(props) {
         }
         const json = await res.json();
         setUserImage(json.images[0].url);
+    }
+
+    async function playAlbum(token) {
+        console.log(token);
+        const data = {
+            context_uri: `${playlist.uri}`,
+            position_ms: 0,
+        };
+
+        const url = `https://api.spotify.com/v1/me/player/play?device_id=a78f92eb38a3e4ff1ea5a2a37495d737b843fa5a `;
+
+        const response = await fetch(url, {
+            method: "PUT",
+            headers: {
+                Authorization: "Bearer " + token,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        setIsPlaying(!isPlaying);
     }
 
     function formatDuration(durationInMilliseconds) {
@@ -163,9 +189,32 @@ function Playlist(props) {
                 </div>
                 <div className="bg-gradient-to-b from-pink-800 to-zinc-900 h-auto rounded-b-md">
                     <div className="flex items-center p-7">
-                        <svg className="w-[4rem] h-[4rem] hover:w-[4.2rem] hover:h-[4.2rem] text-green-500 hover:text-green-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9 13a1 1 0 0 1-2 0V7a1 1 0 0 1 2 0v6Zm4 0a1 1 0 0 1-2 0V7a1 1 0 0 1 2 0v6Z"/>
-                        </svg>
+                        {/* eslint-disable-next-line no-undef,react/prop-types */}
+                        <button onClick={() => {playAlbum(props.token)}}>
+                            {isPlaying ? (
+                                <svg
+                                    className="w-[4rem] h-[4rem] hover:w-[4.2rem] hover:h-[4.2rem] text-green-500 hover:text-green-400"
+                                    aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                >
+                                    <path
+                                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9 13a1 1 0 0 1-2 0V7a1 1 0 0 1 2 0v6Zm4 0a1 1 0 0 1-2 0V7a1 1 0 0 1 2 0v6Z"
+                                    />
+                                </svg>
+                            ) : (
+                                <svg
+                                    className="w-[1.5rem] h-[1.5rem] hover:w-[1.7rem] hover:h-[1.7rem] text-black hover:text-green-400"
+                                    aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="currentColor"
+                                    viewBox="0 0 14 16"
+                                >
+                                    <path d="M0 .984v14.032a1 1 0 0 0 1.506.845l12.006-7.016a.974.974 0 0 0 0-1.69L1.506.139A1 1 0 0 0 0 .984Z" />
+                                </svg>
+                            )}
+                        </button>
                         <svg data-tooltip-target="tooltip-no-arrowP" className="ml-10 w-[1.5rem] h-[1.5rem] hover:w-[1.6rem] hover:h-[1.6rem] text-white opacity-70 hover:opacity-100" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 3">
                             <path d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"/>
                         </svg>
@@ -173,30 +222,30 @@ function Playlist(props) {
                             More options on playlist_name
                         </div>
                     </div>
-                    <div className="m-5 mt-0 relative overflow-x-auto">
+                    <div style={{ height: '510px', overflow: 'auto' }} >
                         <table className="w-full text-sm text-white text-left">
-                            <thead className="border-b border-white border-opacity-20">
-                            <tr className="opacity-60">
-                                <th scope="col" className="pl-6 pb-2 font-normal" style={{ width: '5%' }}>
-                                    #
-                                </th>
-                                <th scope="col" className="pb-2 font-normal" style={{ width: '45%' }}>
-                                    Title
-                                </th>
-                                <th scope="col" className="pb-2 font-normal" style={{ width: '30%' }}>
-                                    Album
-                                </th>
-                                <th scope="col" className="pb-2 font-normal" style={{ width: '15%' }}>
-                                    Date added
-                                </th>
-                                <th scope="col" className="pb-2 font-normal" style={{ width: '15%' }}>
-                                    <svg className="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                        <path stroke="currentColor" strokeLinejoin="round" strokeWidth="2" d="M10 6v4l3.276 3.276M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                                    </svg>
-                                </th>
-                            </tr>
+                            <thead className="border-b border-white border-opacity-20 z-50 sticky top-0 bg-black">
+                                <tr className="opacity-60">
+                                    <th scope="col" className="pl-6 pb-2 font-normal" style={{ width: '5%' }}>
+                                        #
+                                    </th>
+                                    <th scope="col" className="pb-2 font-normal" style={{ width: '45%' }}>
+                                        Title
+                                    </th>
+                                    <th scope="col" className="pb-2 font-normal" style={{ width: '30%' }}>
+                                        Album
+                                    </th>
+                                    <th scope="col" className="pb-2 font-normal" style={{ width: '15%' }}>
+                                        Date added
+                                    </th>
+                                    <th scope="col" className="pb-2 font-normal" style={{ width: '15%' }}>
+                                        <svg className="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                            <path stroke="currentColor" strokeLinejoin="round" strokeWidth="2" d="M10 6v4l3.276 3.276M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                        </svg>
+                                    </th>
+                                </tr>
                             </thead>
-                            <tbody>
+                            <tbody className="z-0">
                             {playlist.tracks.items.map((track) => (
                                 <tr key={track.track.id}>
                                     <th scope="row" className="pl-6 pt-3 whitespace-nowrap opacity-60 font-normal text-lg">
